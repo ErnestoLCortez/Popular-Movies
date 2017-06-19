@@ -16,7 +16,7 @@ import io.github.ernestolcortez.popular_movies.BuildConfig;
 public class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
-    private static final String MOVIEDB_BASE_URL = "https://api.themoviedb.org/3/movie/";
+    private static final String MOVIEDB_BASE_URL = "https://api.themoviedb.org/";
 
     // Paths
     private final static String AUTH_VERSION = "3";
