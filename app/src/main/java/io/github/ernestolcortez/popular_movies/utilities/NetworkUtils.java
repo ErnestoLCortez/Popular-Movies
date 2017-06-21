@@ -45,21 +45,6 @@ public class NetworkUtils {
         return buildUrlHelper(builtUri);
     }
 
-    public static URL buildMovieListUrl(String sortQuery, Integer page) {
-        Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
-                .appendPath(AUTH_VERSION)
-                .appendPath(MEDIA_CATEGORY)
-                .appendPath(sortQuery)
-                .appendQueryParameter(API_KEY, MOVIEDB_API_KEY)
-                .appendQueryParameter(LANG, ENGLISH_US)
-                .appendQueryParameter(PAGE, page.toString())
-                .build();
-
-
-
-        return buildUrlHelper(builtUri);
-    }
-
     private static URL buildUrlHelper(Uri builtUri){
         URL url = null;
         try {

@@ -1,5 +1,6 @@
 package io.github.ernestolcortez.popular_movies;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,8 +28,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private String sortQuery;
     private int checkedMenuItemId;
 
-    private String SORT_STATE_KEY = "sort_state";
-    private String MENU_STATE_KEY = "menu_state";
+    private final String SORT_STATE_KEY = "sort_state";
+    private final String MENU_STATE_KEY = "menu_state";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
 
+    @SuppressLint("StaticFieldLeak")
     public class FetchMovieTask extends AsyncTask<String, Void, MovieObject[]> {
 
         @Override

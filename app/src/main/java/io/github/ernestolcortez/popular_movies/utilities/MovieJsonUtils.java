@@ -3,7 +3,6 @@ package io.github.ernestolcortez.popular_movies.utilities;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.net.URL;
 
 public final class MovieJsonUtils {
 
@@ -15,7 +14,7 @@ public final class MovieJsonUtils {
         final String MOVIE_POSTER = "poster_path";
         final String MOVIE_VOTE_AVG = "vote_average";
         final String MOVIE_OVERVIEW = "overview";
-        MovieObject[] parsedMovieData = null;
+        MovieObject[] parsedMovieData;
 
         JSONObject movieJson = new JSONObject(movieJsonStr);
 

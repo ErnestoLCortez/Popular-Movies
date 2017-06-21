@@ -10,12 +10,12 @@ import com.squareup.picasso.Picasso;
 import io.github.ernestolcortez.popular_movies.utilities.MovieObject;
 
 public class MovieDetailActivity extends AppCompatActivity {
-    MovieObject currentMovie;
-    TextView mTitle;
-    TextView mReleaseDate;
-    TextView mRating;
-    TextView mSynopsis;
-    ImageView mPoster;
+    private MovieObject currentMovie;
+    private TextView mTitle;
+    private TextView mReleaseDate;
+    private TextView mRating;
+    private TextView mSynopsis;
+    private ImageView mPoster;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,5 +49,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         mRating.setText(rating);
         mSynopsis.setText(currentMovie.getPlotSynopsis());
         Picasso.with(this).load(currentMovie.getMoviePosterPath()).into(mPoster);
+        mPoster.setContentDescription("Poster for the Movie: " + currentMovie.getTitle());
     }
 }

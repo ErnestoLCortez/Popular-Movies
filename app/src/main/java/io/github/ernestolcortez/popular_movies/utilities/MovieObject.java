@@ -7,11 +7,11 @@ public final class MovieObject implements Parcelable {
 
     public final static String MOVIE_KEY = "movie";
 
-    private String title;
-    private String releaseDate;
-    private String moviePosterPath;
-    private double voteAverage;
-    private String plotSynopsis;
+    private final String title;
+    private final String releaseDate;
+    private final String moviePosterPath;
+    private final double voteAverage;
+    private final String plotSynopsis;
 
     public MovieObject(String title, String releaseDate, String moviePosterPath, double voteAverage, String plotSynopsis) {
         this.title = title;
@@ -21,7 +21,7 @@ public final class MovieObject implements Parcelable {
         this.plotSynopsis = plotSynopsis;
     }
 
-    public MovieObject(Parcel in){
+    private MovieObject(Parcel in){
         this.title = in.readString();
         this.releaseDate = in.readString();
         this.moviePosterPath = in.readString();
