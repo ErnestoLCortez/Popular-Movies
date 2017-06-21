@@ -21,7 +21,6 @@ import io.github.ernestolcortez.popular_movies.utilities.NetworkUtils;
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
-    private GridLayoutManager mGridLayoutManager;
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
     private Menu toolbarMenu;
@@ -36,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         if (savedInstanceState != null){
             sortQuery = savedInstanceState.getString(SORT_STATE_KEY);
             checkedMenuItemId = savedInstanceState.getInt(MENU_STATE_KEY);
@@ -48,8 +48,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_movies);
-        mGridLayoutManager = new GridLayoutManager(this, 3);
-        mRecyclerView.setLayoutManager(mGridLayoutManager);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         mMovieAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mMovieAdapter);
 
@@ -98,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public void onClick(MovieObject selectedMovie) {
         Intent intent = new Intent(getBaseContext(), MovieDetailActivity.class);
-        intent.putExtra("movie", selectedMovie);
+        intent.putExtra(MovieObject.MOVIE_KEY, selectedMovie);
         startActivity(intent);
     }
 

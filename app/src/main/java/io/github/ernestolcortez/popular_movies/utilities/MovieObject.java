@@ -4,6 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public final class MovieObject implements Parcelable {
+
+    public final static String MOVIE_KEY = "movie";
+
     private String title;
     private String releaseDate;
     private String moviePosterPath;
