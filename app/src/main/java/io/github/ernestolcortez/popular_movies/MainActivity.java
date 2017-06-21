@@ -20,6 +20,8 @@ import io.github.ernestolcortez.popular_movies.utilities.MovieObject;
 import io.github.ernestolcortez.popular_movies.utilities.NetworkUtils;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
+    private final String SORT_STATE_KEY = "sort_state";
+    private final String MENU_STATE_KEY = "menu_state";
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
     private TextView mErrorMessageDisplay;
@@ -27,9 +29,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private Menu toolbarMenu;
     private String sortQuery;
     private int checkedMenuItemId;
-
-    private final String SORT_STATE_KEY = "sort_state";
-    private final String MENU_STATE_KEY = "menu_state";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

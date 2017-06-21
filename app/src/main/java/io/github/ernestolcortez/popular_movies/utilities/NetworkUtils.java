@@ -14,16 +14,14 @@ import io.github.ernestolcortez.popular_movies.BuildConfig;
 
 
 public class NetworkUtils {
+    public final static String SORT_POPULAR = "popular";
+    public final static String SORT_TOP_RATED = "top_rated";
     private static final String TAG = NetworkUtils.class.getSimpleName();
-
     private static final String MOVIEDB_BASE_URL = "https://api.themoviedb.org/";
     private static final String MOVIEDB_IMAGE_URL = "https://image.tmdb.org/t/p/";
-
     // Paths
     private final static String AUTH_VERSION = "3";
     private final static String MEDIA_CATEGORY = "movie";
-    public final static String SORT_POPULAR = "popular";
-    public final static String SORT_TOP_RATED = "top_rated";
     private final static String IMAGE_SIZE = "w500";
     // Values
     private final static String MOVIEDB_API_KEY = BuildConfig.MOVIEDB_API_KEY;
