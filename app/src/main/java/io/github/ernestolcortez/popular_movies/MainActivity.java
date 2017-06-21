@@ -1,9 +1,8 @@
 package io.github.ernestolcortez.popular_movies;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,9 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 
 import io.github.ernestolcortez.popular_movies.utilities.MovieJsonUtils;
@@ -25,19 +21,35 @@ import io.github.ernestolcortez.popular_movies.utilities.NetworkUtils;
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
+    private GridLayoutManager mGridLayoutManager;
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
+    private Menu toolbarMenu;
+    private String sortQuery;
+    private int checkedMenuItemId;
+
+    private String SORT_STATE_KEY = "sort_state";
+    private String MENU_STATE_KEY = "menu_state";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (savedInstanceState != null){
+            sortQuery = savedInstanceState.getString(SORT_STATE_KEY);
+            checkedMenuItemId = savedInstanceState.getInt(MENU_STATE_KEY);
+        } else {
+            sortQuery = NetworkUtils.SORT_POPULAR;
+            checkedMenuItemId = R.id.sort_popular;
+        }
+
         mErrorMessageDisplay = (TextView) findViewById(R.id.error_message_display);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_movies);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        mGridLayoutManager = new GridLayoutManager(this, 3);
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
         mMovieAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mMovieAdapter);
 
@@ -49,28 +61,50 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        toolbarMenu = menu;
+        toolbarMenu.findItem(checkedMenuItemId).setChecked(true);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch(item.getItemId()){
+            case R.id.sort_popular:
+                if(item.isChecked())
+                    break;
+                item.setChecked(true);
+                sortQuery = NetworkUtils.SORT_POPULAR;
+                loadWeatherData();
+                break;
+            case R.id.sort_rating:
+                if(item.isChecked())
+                    break;
+                item.setChecked(true);
+                sortQuery = NetworkUtils.SORT_TOP_RATED;
+                loadWeatherData();
+                break;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+
+        outState.putString(SORT_STATE_KEY, sortQuery);
+        outState.putInt(MENU_STATE_KEY, toolbarMenu.findItem(R.id.sort_popular).isChecked() ? R.id.sort_popular : R.id.sort_rating);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onClick(MovieObject selectedMovie) {
-        //Launch intent
+        Intent intent = new Intent(getBaseContext(), MovieDetailActivity.class);
+        intent.putExtra("movie", selectedMovie);
+        startActivity(intent);
     }
 
     private void loadWeatherData() {
         showMovieDataView();
-        // TODO: Grab sort from menu
-        new FetchMovieTask().execute(NetworkUtils.SORT_POPULAR);
+        new FetchMovieTask().execute(sortQuery);
     }
 
     private void showMovieDataView() {

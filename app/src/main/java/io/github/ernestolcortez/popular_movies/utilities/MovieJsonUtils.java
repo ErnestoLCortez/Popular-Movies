@@ -3,12 +3,7 @@ package io.github.ernestolcortez.popular_movies.utilities;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.net.HttpURLConnection;
-
-/**
- * Created by louie on 6/20/17.
- */
+import java.net.URL;
 
 public final class MovieJsonUtils {
 
@@ -34,7 +29,7 @@ public final class MovieJsonUtils {
 
             String title = movie.getString(MOVIE_TITLE);
             String releaseDate = movie.getString(MOVIE_RELEASE_DATE);
-            String moviePosterPath = movie.getString(MOVIE_POSTER);
+            String moviePosterPath = NetworkUtils.buildMovieImageURL(movie.getString(MOVIE_POSTER)).toString();
             double voteAverage = movie.getDouble(MOVIE_VOTE_AVG);
             String plotSynopsis = movie.getString(MOVIE_OVERVIEW);
 
