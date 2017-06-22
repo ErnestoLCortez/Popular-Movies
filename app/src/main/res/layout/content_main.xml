@@ -20,15 +20,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:padding="16dp"
+        android:padding="@dimen/padding_large"
         android:text="@string/error_message"
-        android:textSize="20sp"
+        android:textSize="@dimen/text_size_title"
         android:visibility="invisible"/>
 
     <ProgressBar
         android:id="@+id/pb_loading_indicator"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
+        android:layout_width="@dimen/progress_bar_dimen"
+        android:layout_height="@dimen/progress_bar_dimen"
         android:layout_gravity="center"
         android:visibility="invisible" />
 

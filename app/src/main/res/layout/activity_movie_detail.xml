@@ -20,8 +20,8 @@
                 android:id="@+id/detail_view_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:textSize="40sp"
+                android:padding="@dimen/padding_large"
+                android:textSize="@dimen/text_size_display1"
                 tools:text="Movie Title"/>
 
         </LinearLayout>
@@ -38,7 +38,7 @@
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/placeholder_description"
-                android:padding="16dp"
+                android:padding="@dimen/padding_large"
                 android:src="@drawable/posterplaceholder"/>
 
             <LinearLayout
@@ -46,20 +46,20 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="@dimen/padding_large">
 
                 <TextView
                     android:id="@+id/detail_view_release"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/text_size_title"
                     tools:text="2017-00-00"/>
 
                 <TextView
                     android:id="@+id/detail_view_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/text_size_subheading"
                     tools:text="10/10"
                     />
 
@@ -71,7 +71,7 @@
             android:id="@+id/detail_view_synopsis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="@dimen/padding_large"
             tools:text="Movie synopsis."/>
 
     </LinearLayout>

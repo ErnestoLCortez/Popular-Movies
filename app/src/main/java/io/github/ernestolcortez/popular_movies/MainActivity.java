@@ -1,8 +1,6 @@
 package io.github.ernestolcortez.popular_movies;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,10 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import java.net.URL;
-
 import io.github.ernestolcortez.popular_movies.utilities.AsyncTaskListener;
-import io.github.ernestolcortez.popular_movies.utilities.MovieJsonUtils;
 import io.github.ernestolcortez.popular_movies.utilities.MovieObject;
 import io.github.ernestolcortez.popular_movies.utilities.NetworkUtils;
 
@@ -117,8 +112,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
-
-    @SuppressLint("StaticFieldLeak")
     public class FetchMovieListener implements AsyncTaskListener {
 
         @Override
