@@ -1,5 +1,6 @@
 package io.github.ernestolcortez.popular_movies;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -21,18 +22,20 @@ public class MovieDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
-
-        if(savedInstanceState != null){
-            currentMovie = savedInstanceState.getParcelable(MovieObject.MOVIE_KEY);
-        } else {
-            currentMovie = getIntent().getParcelableExtra(MovieObject.MOVIE_KEY);
-        }
+        Intent intent = getIntent();
 
         mTitle = (TextView) findViewById(R.id.detail_view_title);
         mReleaseDate = (TextView) findViewById(R.id.detail_view_release);
         mRating = (TextView) findViewById(R.id.detail_view_rating);
         mSynopsis = (TextView) findViewById(R.id.detail_view_synopsis);
         mPoster = (ImageView) findViewById(R.id.detail_view_poster);
+
+        if(savedInstanceState != null){
+            currentMovie = savedInstanceState.getParcelable(MovieObject.MOVIE_KEY);
+        } else if (intent != null && intent.hasExtra(MovieObject.MOVIE_KEY)){
+            currentMovie = getIntent().getParcelableExtra(MovieObject.MOVIE_KEY);
+        }
+
         fillMovieViews();
     }
 
