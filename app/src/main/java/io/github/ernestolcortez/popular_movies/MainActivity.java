@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import io.github.ernestolcortez.popular_movies.utilities.AsyncTaskListener;
 import io.github.ernestolcortez.popular_movies.utilities.MovieObject;
 import io.github.ernestolcortez.popular_movies.utilities.NetworkUtils;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         setContentView(R.layout.activity_main);
 
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             sortQuery = savedInstanceState.getString(SORT_STATE_KEY);
             checkedMenuItemId = savedInstanceState.getInt(MENU_STATE_KEY);
         } else {
@@ -63,16 +64,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.sort_popular:
-                if(item.isChecked())
+                if (item.isChecked())
                     break;
                 item.setChecked(true);
                 sortQuery = NetworkUtils.SORT_POPULAR;
                 loadWeatherData();
                 break;
             case R.id.sort_rating:
-                if(item.isChecked())
+                if (item.isChecked())
                     break;
                 item.setChecked(true);
                 sortQuery = NetworkUtils.SORT_TOP_RATED;
