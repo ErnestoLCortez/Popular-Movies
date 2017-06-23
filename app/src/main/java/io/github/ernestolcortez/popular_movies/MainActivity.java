@@ -1,6 +1,7 @@
 package io.github.ernestolcortez.popular_movies;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -41,11 +42,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             checkedMenuItemId = R.id.sort_popular;
         }
 
+        boolean isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+        int spanCount = isPortrait ? 2 : 4;
+
         mErrorMessageDisplay = (TextView) findViewById(R.id.error_message_display);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_movies);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, spanCount));
         mMovieAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mMovieAdapter);
 
