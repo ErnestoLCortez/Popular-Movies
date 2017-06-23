@@ -34,7 +34,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     public void onBindViewHolder(MovieAdapterViewHolder MovieAdapterViewHolder, int position) {
         MovieObject movie = mMovieData[position];
         String moviePosterURL = movie.getMoviePosterPath();
-        Picasso.with(mContext).load(moviePosterURL).into(MovieAdapterViewHolder.mMoviePoster);
+        Picasso.with(mContext).load(moviePosterURL).placeholder(R.drawable.posterplaceholder).into(MovieAdapterViewHolder.mMoviePoster);
         MovieAdapterViewHolder.mMoviePoster.setContentDescription("Poster for movie: " + movie.getTitle());
     }
 
