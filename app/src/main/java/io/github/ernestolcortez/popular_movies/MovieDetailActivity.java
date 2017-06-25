@@ -53,5 +53,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         mSynopsis.setText(currentMovie.getPlotSynopsis());
         Picasso.with(this).load(currentMovie.getMoviePosterPath()).placeholder(R.drawable.posterplaceholder).into(mPoster);
         mPoster.setContentDescription("Poster for the Movie: " + currentMovie.getTitle());
+        mPoster.setMaxHeight(getResources().getDisplayMetrics().heightPixels);
     }
 }
