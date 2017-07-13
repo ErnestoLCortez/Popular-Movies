@@ -1,6 +1,9 @@
 package io.github.ernestolcortez.popular_movies;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.databinding.DataBindingUtil;
+import android.support.v4.app.LoaderManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -17,6 +20,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private TextView mRating;
     private TextView mSynopsis;
     private ImageView mPoster;
+    private MovieDetailActivity mDetailBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

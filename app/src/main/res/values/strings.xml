@@ -1,9 +1,20 @@
 <resources>
     <string name="app_name">Popular-Movies</string>
     <string name="error_message">An error has occurred</string>
+    <string name="action_settings">Settings</string>
+    <!-- Label for sort preference category -->
+    <string name="pref_sort_label">Sort By</string>
+    <!-- Labels for the Sort_By prefrence option -->
+    <string name="pref_sort_label_popular">Most Popular</string>
+    <string name="pref_sort_label_rating">Highest Rated</string>
+    <string name="pref_sort_label_favorites">Favorites</string>
 
-    <string name="sort_popular">Sort by Most Popular</string>
-    <string name="sort_rating">Sort by Highest Rated</string>
+    <!-- Label for sort preference category -->
+    <string name="pref_sort_key">sort</string>
+    <!-- Labels for the Sort_By prefrence option -->
+    <string name="pref_sort_key_popular">popular</string>
+    <string name="pref_sort_key_rating">rating</string>
+    <string name="pref_sort_key_favorites">favorites</string>
 
     <string name="placeholder_description">Placeholder image</string>
 
