@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,18 +17,15 @@ import android.widget.TextView;
 
 import io.github.ernestolcortez.popular_movies.utilities.AsyncTaskListener;
 import io.github.ernestolcortez.popular_movies.utilities.MovieObject;
-import io.github.ernestolcortez.popular_movies.utilities.NetworkUtils;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
-    private final String SORT_STATE_KEY = "sort_state";
-    private final String MENU_STATE_KEY = "menu_state";
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler, SharedPreferences.OnSharedPreferenceChangeListener {
+
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
-    private Menu toolbarMenu;
     private String sortQuery;
-    private int checkedMenuItemId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +34,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (savedInstanceState != null) {
-            sortQuery = savedInstanceState.getString(SORT_STATE_KEY);
-            checkedMenuItemId = savedInstanceState.getInt(MENU_STATE_KEY);
-        } else {
-            sortQuery = NetworkUtils.SORT_POPULAR;
-            checkedMenuItemId = R.id.sort_popular;
-        }
+        sortQuery = sharedPreferences.getString(getString(R.string.pref_sort_key), getResources().getString(R.string.pref_sort_key_popular));
 
         boolean isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
         int spanCount = isPortrait ? 2 : 4;
@@ -57,16 +47,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mMovieAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mMovieAdapter);
 
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        loadWeatherData();
+        loadMovieData();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        toolbarMenu = menu;
-        toolbarMenu.findItem(checkedMenuItemId).setChecked(true);
         return true;
     }
 
@@ -76,30 +66,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
-            case R.id.sort_popular:
-                if (item.isChecked())
-                    break;
-                item.setChecked(true);
-                sortQuery = NetworkUtils.SORT_POPULAR;
-                loadWeatherData();
-                break;
-            case R.id.sort_rating:
-                if (item.isChecked())
-                    break;
-                item.setChecked(true);
-                sortQuery = NetworkUtils.SORT_TOP_RATED;
-                loadWeatherData();
-                break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void onSaveInstanceState(Bundle outState) {
-
-        outState.putString(SORT_STATE_KEY, sortQuery);
-        outState.putInt(MENU_STATE_KEY, toolbarMenu.findItem(R.id.sort_popular).isChecked() ? R.id.sort_popular : R.id.sort_rating);
-
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -109,7 +77,22 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         startActivity(intent);
     }
 
-    private void loadWeatherData() {
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_sort_key))) {
+            sortQuery = sharedPreferences.getString(key, getResources().getString(R.string.pref_sort_key_popular));
+            loadMovieData();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    private void loadMovieData() {
         showMovieDataView();
         new FetchMovieTask(new FetchMovieListener()).execute(sortQuery);
     }

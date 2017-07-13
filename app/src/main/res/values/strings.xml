@@ -13,7 +13,7 @@
     <string name="pref_sort_key">sort</string>
     <!-- Labels for the Sort_By prefrence option -->
     <string name="pref_sort_key_popular">popular</string>
-    <string name="pref_sort_key_rating">rating</string>
+    <string name="pref_sort_key_rating">top_rated</string>
     <string name="pref_sort_key_favorites">favorites</string>
 
     <string name="placeholder_description">Placeholder image</string>

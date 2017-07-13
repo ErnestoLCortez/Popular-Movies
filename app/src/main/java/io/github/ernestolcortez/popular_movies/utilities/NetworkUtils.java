@@ -14,8 +14,6 @@ import io.github.ernestolcortez.popular_movies.BuildConfig;
 
 
 public class NetworkUtils {
-    public final static String SORT_POPULAR = "popular";
-    public final static String SORT_TOP_RATED = "top_rated";
     private static final String TAG = NetworkUtils.class.getSimpleName();
     private static final String MOVIEDB_BASE_URL = "https://api.themoviedb.org/";
     private static final String MOVIEDB_IMAGE_URL = "https://image.tmdb.org/t/p/";
