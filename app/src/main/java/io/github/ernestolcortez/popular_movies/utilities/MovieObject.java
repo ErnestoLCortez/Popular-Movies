@@ -22,13 +22,15 @@ public final class MovieObject implements Parcelable {
     private final String moviePosterPath;
     private final double voteAverage;
     private final String plotSynopsis;
+    private final int movieId;
 
-    public MovieObject(String title, String releaseDate, String moviePosterPath, double voteAverage, String plotSynopsis) {
+    public MovieObject(String title, String releaseDate, String moviePosterPath, double voteAverage, String plotSynopsis, int movieId) {
         this.title = title;
         this.releaseDate = releaseDate;
         this.moviePosterPath = moviePosterPath;
         this.voteAverage = voteAverage;
         this.plotSynopsis = plotSynopsis;
+        this.movieId = movieId;
     }
 
     private MovieObject(Parcel in){
@@ -37,6 +39,7 @@ public final class MovieObject implements Parcelable {
         this.moviePosterPath = in.readString();
         this.voteAverage = in.readDouble();
         this.plotSynopsis = in.readString();
+        this.movieId = in.readInt();
     }
 
     @Override
@@ -51,6 +54,7 @@ public final class MovieObject implements Parcelable {
         dest.writeString(moviePosterPath);
         dest.writeDouble(voteAverage);
         dest.writeString(plotSynopsis);
+        dest.writeInt(movieId);
     }
 
     public String getTitle() {
@@ -72,4 +76,6 @@ public final class MovieObject implements Parcelable {
     public String getPlotSynopsis() {
         return plotSynopsis;
     }
+
+    public int getMovieId() { return movieId; }
 }
