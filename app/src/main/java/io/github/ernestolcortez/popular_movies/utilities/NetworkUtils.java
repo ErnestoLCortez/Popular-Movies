@@ -41,6 +41,27 @@ public class NetworkUtils {
         return buildUrlHelper(builtUri);
     }
 
+    public static URL buildMovieImageURL(String filePath) {
+        Uri builtUri = Uri.parse(MOVIEDB_IMAGE_URL).buildUpon()
+                .appendPath(IMAGE_SIZE)
+                .appendEncodedPath(filePath)
+                .build();
+
+        return buildUrlHelper(builtUri);
+    }
+
+    public static URL buildSingleMovieUrl(int movieId){
+        Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
+                .appendPath(AUTH_VERSION)
+                .appendPath(MEDIA_CATEGORY)
+                .appendPath(Integer.toString(movieId))
+                .appendQueryParameter(API_KEY, MOVIEDB_API_KEY)
+                .appendQueryParameter(LANG, ENGLISH_US)
+                .build();
+
+        return buildUrlHelper(builtUri);
+    }
+
     private static URL buildUrlHelper(Uri builtUri){
         URL url = null;
         try {
@@ -50,24 +71,6 @@ public class NetworkUtils {
         }
 
         Log.v(TAG, "Built URI " + url);
-
-        return url;
-    }
-
-    public static URL buildMovieImageURL(String filePath) {
-        Uri buildUri = Uri.parse(MOVIEDB_IMAGE_URL).buildUpon()
-                .appendPath(IMAGE_SIZE)
-                .appendEncodedPath(filePath)
-                .build();
-
-        URL url = null;
-        try {
-            url = new URL(buildUri.toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        Log.v(TAG, "Built Image URI " + url);
 
         return url;
     }

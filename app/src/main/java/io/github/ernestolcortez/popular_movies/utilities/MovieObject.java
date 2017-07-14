@@ -1,7 +1,11 @@
 package io.github.ernestolcortez.popular_movies.utilities;
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
+import io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract;
+
+import static io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract.Movies.COLUMN_MOVIE_ID;
 
 public final class MovieObject implements Parcelable {
 
@@ -78,4 +82,10 @@ public final class MovieObject implements Parcelable {
     }
 
     public int getMovieId() { return movieId; }
+
+    public ContentValues toContentValue() {
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_MOVIE_ID, movieId);
+        return cv;
+    }
 }

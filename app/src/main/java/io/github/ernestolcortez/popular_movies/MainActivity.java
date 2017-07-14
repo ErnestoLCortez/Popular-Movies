@@ -1,8 +1,12 @@
 package io.github.ernestolcortez.popular_movies;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +19,8 @@ import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract;
+import io.github.ernestolcortez.popular_movies.data.FavoriteMoviesDbHelper;
 import io.github.ernestolcortez.popular_movies.utilities.AsyncTaskListener;
 import io.github.ernestolcortez.popular_movies.utilities.MovieObject;
 
@@ -25,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
     private String sortQuery;
+    private SQLiteDatabase mDb;
 
 
     @Override
@@ -51,6 +58,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        FavoriteMoviesDbHelper dbHelper = new FavoriteMoviesDbHelper(this);
+        mDb = dbHelper.getReadableDatabase();
+
         loadMovieData();
     }
 
@@ -94,7 +105,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private void loadMovieData() {
         showMovieDataView();
-        new FetchMovieTask(new FetchMovieListener()).execute(sortQuery);
+        if(sortQuery.equals(getString(R.string.pref_sort_key_favorites))){
+            new FetchMovieTask(new FetchMovieListener()).execute(sortQuery, getFavorites());
+        } else {
+            new FetchMovieTask(new FetchMovieListener()).execute(sortQuery);
+        }
     }
 
     private void showMovieDataView() {
@@ -105,6 +120,18 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void showErrorMessage() {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
+    }
+
+    private Cursor getFavorites() {
+        return mDb.query(
+                FavoriteMoviesContract.Movies.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                FavoriteMoviesContract.Movies.COLUMN_MOVIE_ID
+        );
     }
 
     public class FetchMovieListener implements AsyncTaskListener {

@@ -1,14 +1,16 @@
 package io.github.ernestolcortez.popular_movies;
 
+import android.database.Cursor;
 import android.os.AsyncTask;
 import java.net.URL;
 
+import io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract;
 import io.github.ernestolcortez.popular_movies.utilities.AsyncTaskListener;
 import io.github.ernestolcortez.popular_movies.utilities.MovieJsonUtils;
 import io.github.ernestolcortez.popular_movies.utilities.MovieObject;
 import io.github.ernestolcortez.popular_movies.utilities.NetworkUtils;
 
-public class FetchMovieTask extends AsyncTask<String, Void, MovieObject[]> {
+public class FetchMovieTask extends AsyncTask<Object, Void, MovieObject[]> {
 
 
     private AsyncTaskListener mListener;
@@ -24,12 +26,18 @@ public class FetchMovieTask extends AsyncTask<String, Void, MovieObject[]> {
     }
 
     @Override
-    protected MovieObject[] doInBackground(String... params) {
+    protected MovieObject[] doInBackground(Object... params) {
 
         if (params.length == 0)
             return null;
 
-        String sortQuery = params[0];
+        String sortQuery = (String)params[0];
+
+        if(sortQuery.equals("favorites")){
+            Cursor cursor = (Cursor)params[1];
+            return fetchMoviesById(cursor);
+        }
+
         URL movieRequestUrl = NetworkUtils.buildMovieListUrl(sortQuery);
 
         try {
@@ -43,6 +51,28 @@ public class FetchMovieTask extends AsyncTask<String, Void, MovieObject[]> {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private MovieObject[] fetchMoviesById(Cursor cursor) {
+        MovieObject[] movieObjects = new MovieObject[cursor.getCount()];
+        int index = 0;
+
+        try {
+            while (cursor.moveToNext()){
+                URL movieRequestUrl = NetworkUtils.buildSingleMovieUrl(cursor.getInt(FavoriteMoviesContract.Movies.COL_INDEX_MOVIE_ID));
+                String jsonResponse = NetworkUtils
+                        .getResponseFromHttpUrl(movieRequestUrl);
+                movieObjects[index] = MovieJsonUtils
+                        .getMovieObjectFromJson(jsonResponse);
+                index++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+
+        return movieObjects;
     }
 
     @Override
