@@ -10,12 +10,12 @@ import io.github.ernestolcortez.popular_movies.utilities.MovieJsonUtils;
 import io.github.ernestolcortez.popular_movies.utilities.MovieObject;
 import io.github.ernestolcortez.popular_movies.utilities.NetworkUtils;
 
-public class FetchMovieTask extends AsyncTask<Object, Void, MovieObject[]> {
+public class FetchMovieFromAPITask extends AsyncTask<Object, Void, MovieObject[]> {
 
 
     private AsyncTaskListener mListener;
 
-    public FetchMovieTask(AsyncTaskListener listener) {
+    public FetchMovieFromAPITask(AsyncTaskListener listener) {
         mListener = listener;
     }
 
@@ -55,16 +55,14 @@ public class FetchMovieTask extends AsyncTask<Object, Void, MovieObject[]> {
 
     private MovieObject[] fetchMoviesById(Cursor cursor) {
         MovieObject[] movieObjects = new MovieObject[cursor.getCount()];
-        int index = 0;
 
         try {
-            while (cursor.moveToNext()){
+            for (int index = 0; cursor.moveToNext(); ++index){
                 URL movieRequestUrl = NetworkUtils.buildSingleMovieUrl(cursor.getInt(FavoriteMoviesContract.Movies.COL_INDEX_MOVIE_ID));
                 String jsonResponse = NetworkUtils
                         .getResponseFromHttpUrl(movieRequestUrl);
                 movieObjects[index] = MovieJsonUtils
                         .getMovieObjectFromJson(jsonResponse);
-                index++;
             }
         } catch (Exception e) {
             e.printStackTrace();

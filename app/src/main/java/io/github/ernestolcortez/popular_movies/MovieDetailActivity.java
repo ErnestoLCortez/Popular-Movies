@@ -1,11 +1,9 @@
 package io.github.ernestolcortez.popular_movies;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.databinding.DataBindingUtil;
-import android.support.v4.app.LoaderManager;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,12 +14,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract;
 import io.github.ernestolcortez.popular_movies.data.FavoriteMoviesDbHelper;
 import io.github.ernestolcortez.popular_movies.utilities.MovieObject;
 
-import static io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract.Movies.COLUMN_MOVIE_ID;
-import static io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract.Movies.TABLE_NAME;
+import static io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract.Movies.*;
+
 
 public class MovieDetailActivity extends AppCompatActivity {
     private MovieObject currentMovie;
@@ -77,12 +74,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     public void addFavorite(View v) {
-
-        mDb.insertOrThrow(
-                TABLE_NAME,
-                null,
-                currentMovie.toContentValue()
-        );
+        getContentResolver().insert(CONTENT_URI, currentMovie.toContentValue());
     }
 
     private void setFavoritesButton() {
@@ -93,13 +85,10 @@ public class MovieDetailActivity extends AppCompatActivity {
     private boolean isFavorite() {
 
         String movieId = Integer.toString(currentMovie.getMovieId());
-        Log.d("Stuff", movieId);
 
-        Cursor cursor = mDb.query(
-                TABLE_NAME,
+        Cursor cursor = getContentResolver().query(
+                CONTENT_URI.buildUpon().appendPath(movieId).build(),
                 null,
-                COLUMN_MOVIE_ID + " = ?",
-                new String[] { movieId},
                 null,
                 null,
                 null
