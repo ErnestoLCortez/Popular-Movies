@@ -3,13 +3,13 @@ package io.github.ernestolcortez.popular_movies;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import io.github.ernestolcortez.popular_movies.data.FetchMovieFromDBListener;
-import static io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract.Movies.CONTENT_URI;
 
 
-public class FetchMovieFromDBTask extends AsyncTask<String, Void, Cursor> {
+public class FetchMovieFromDBTask extends AsyncTask<Uri, Void, Cursor> {
 
     private FetchMovieFromDBListener mListener;
     private ContentResolver contentResolver;
@@ -21,10 +21,11 @@ public class FetchMovieFromDBTask extends AsyncTask<String, Void, Cursor> {
 
 
     @Override
-    protected Cursor doInBackground(String... strings) {
+    protected Cursor doInBackground(Uri... uri) {
+
         try {
             return contentResolver.query(
-                    CONTENT_URI,
+                    uri[0],
                     null,
                     null,
                     null,

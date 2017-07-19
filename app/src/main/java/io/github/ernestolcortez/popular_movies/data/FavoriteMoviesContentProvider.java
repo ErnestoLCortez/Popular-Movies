@@ -68,7 +68,6 @@ public class FavoriteMoviesContentProvider extends ContentProvider {
 
         returnCursor.setNotificationUri(getContext().getContentResolver(), uri);
 
-        //db.close();
         return returnCursor;
     }
 
@@ -100,13 +99,37 @@ public class FavoriteMoviesContentProvider extends ContentProvider {
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
-        //db.close();
+
         return returnUri;
     }
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        int deletedRows;
+
+        switch(sUriMatcher.match(uri)){
+            case MOVIE_BY_ID:
+                String id = uri.getPathSegments().get(1);
+                String mSelection = COLUMN_MOVIE_ID + " = ?";
+                String[] mSelectionArgs = new String[]{id};
+
+                deletedRows = db.delete(
+                        TABLE_NAME,
+                        mSelection,
+                        mSelectionArgs
+                );
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        if (deletedRows != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return deletedRows;
     }
 
     @Override

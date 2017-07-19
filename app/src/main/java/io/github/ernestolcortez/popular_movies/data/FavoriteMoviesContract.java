@@ -17,6 +17,16 @@ public final class FavoriteMoviesContract {
                 .appendPath(PATH_MOVIES)
                 .build();
 
+        public static Uri contentUriWithId(int id) {
+
+            String movieId = Integer.toString(id);
+
+            return CONTENT_URI
+                    .buildUpon()
+                    .appendPath(movieId)
+                    .build();
+        }
+
         public static final String TABLE_NAME = "movies";
 
         public static final String COLUMN_MOVIE_ID = "movie_id";

@@ -2,11 +2,9 @@ package io.github.ernestolcortez.popular_movies;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
+import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,6 +13,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import io.github.ernestolcortez.popular_movies.data.FavoriteMoviesDbHelper;
+import io.github.ernestolcortez.popular_movies.data.FetchMovieFromDBListener;
+import io.github.ernestolcortez.popular_movies.databinding.ActivityMovieDetailBinding;
 import io.github.ernestolcortez.popular_movies.utilities.MovieObject;
 
 import static io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract.Movies.*;
@@ -22,25 +22,13 @@ import static io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContrac
 
 public class MovieDetailActivity extends AppCompatActivity {
     private MovieObject currentMovie;
-    private TextView mTitle;
-    private TextView mReleaseDate;
-    private TextView mRating;
-    private TextView mSynopsis;
-    private ImageView mPoster;
-    private MovieDetailActivity mDetailBinding;
-    private SQLiteDatabase mDb;
+    private ActivityMovieDetailBinding mDetailBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_detail);
+        mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_movie_detail);
         Intent intent = getIntent();
-
-        mTitle = (TextView) findViewById(R.id.detail_view_title);
-        mReleaseDate = (TextView) findViewById(R.id.detail_view_release);
-        mRating = (TextView) findViewById(R.id.detail_view_rating);
-        mSynopsis = (TextView) findViewById(R.id.detail_view_synopsis);
-        mPoster = (ImageView) findViewById(R.id.detail_view_poster);
 
         if(savedInstanceState != null){
             currentMovie = savedInstanceState.getParcelable(MovieObject.MOVIE_KEY);
@@ -48,10 +36,8 @@ public class MovieDetailActivity extends AppCompatActivity {
             currentMovie = getIntent().getParcelableExtra(MovieObject.MOVIE_KEY);
         }
 
-        FavoriteMoviesDbHelper dbHelper = new FavoriteMoviesDbHelper(this);
-        mDb = dbHelper.getWritableDatabase();
-
-        setFavoritesButton();
+        new FetchMovieFromDBTask(new FetchMovieListener(), this)
+                .execute(contentUriWithId(currentMovie.getMovieId()));
         fillMovieViews();
 
     }
@@ -64,36 +50,33 @@ public class MovieDetailActivity extends AppCompatActivity {
     private void fillMovieViews() {
         String rating = currentMovie.getVoteAverage() + "/10";
 
-        mTitle.setText(currentMovie.getTitle());
-        mReleaseDate.setText(currentMovie.getReleaseDate());
-        mRating.setText(rating);
-        mSynopsis.setText(currentMovie.getPlotSynopsis());
-        Picasso.with(this).load(currentMovie.getMoviePosterPath()).placeholder(R.drawable.posterplaceholder).into(mPoster);
-        mPoster.setContentDescription("Poster for the Movie: " + currentMovie.getTitle());
-        mPoster.setMaxHeight(getResources().getDisplayMetrics().heightPixels);
+        mDetailBinding.detailViewTitle.setText(currentMovie.getTitle());
+        mDetailBinding.detailViewRelease.setText(currentMovie.getReleaseDate());
+        mDetailBinding.detailViewRating.setText(rating);
+        mDetailBinding.detailViewSynopsis.setText(currentMovie.getPlotSynopsis());
+        Picasso.with(this).load(currentMovie.getMoviePosterPath()).placeholder(R.drawable.posterplaceholder).into(mDetailBinding.detailViewPoster);
+        mDetailBinding.detailViewSynopsis.setContentDescription("Poster for the Movie: " + currentMovie.getTitle());
+        mDetailBinding.detailViewSynopsis.setMaxHeight(getResources().getDisplayMetrics().heightPixels);
     }
 
     public void addFavorite(View v) {
         getContentResolver().insert(CONTENT_URI, currentMovie.toContentValue());
     }
 
-    private void setFavoritesButton() {
-        String buttonText = isFavorite() ? "Remove" : "Add";
+    public void removeFavorite(View v) {
+        getContentResolver().delete(contentUriWithId(currentMovie.getMovieId()), null, null);
+    }
+
+    private void setFavoritesButton(boolean isFavorite) {
+        String buttonText = isFavorite ? "Remove" : "Add";
         ((Button) findViewById(R.id.fav_button)).setText(buttonText);
     }
 
-    private boolean isFavorite() {
+    public class FetchMovieListener implements FetchMovieFromDBListener {
 
-        String movieId = Integer.toString(currentMovie.getMovieId());
-
-        Cursor cursor = getContentResolver().query(
-                CONTENT_URI.buildUpon().appendPath(movieId).build(),
-                null,
-                null,
-                null,
-                null
-        );
-
-        return cursor.getCount() > 0;
+        @Override
+        public void onTaskComplete(Cursor cursor) {
+            setFavoritesButton(cursor.getCount() > 0);
+        }
     }
 }

@@ -21,6 +21,8 @@ import io.github.ernestolcortez.popular_movies.data.FetchMovieFromDBListener;
 import io.github.ernestolcortez.popular_movies.utilities.AsyncTaskListener;
 import io.github.ernestolcortez.popular_movies.utilities.MovieObject;
 
+import static io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract.Movies.CONTENT_URI;
+
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler, SharedPreferences.OnSharedPreferenceChangeListener{
 
     private RecyclerView mRecyclerView;
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void loadMovieData() {
         showMovieDataView();
         if(sortQuery.equals(getString(R.string.pref_sort_key_favorites))){
-            new FetchMovieFromDBTask(new FetchMovieListener(), this).execute();
+            new FetchMovieFromDBTask(new FetchMovieListener(), this).execute(CONTENT_URI);
         } else {
             new FetchMovieFromAPITask(new FetchMovieListener()).execute(sortQuery);
         }
