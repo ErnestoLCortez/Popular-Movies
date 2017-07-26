@@ -5,6 +5,10 @@
     <dimen name="card_corner_radius">4dp</dimen>
     <dimen name="card_margin_small">2dp</dimen>
 
+    <dimen name="margin_large">16dp</dimen>
+    <dimen name="margin_medium">8dp</dimen>
+    <dimen name="margin_small">4dp</dimen>
+
     <dimen name="text_size_display1">34sp</dimen>
     <dimen name="text_size_title">20sp</dimen>
     <dimen name="text_size_subheading">16sp</dimen>

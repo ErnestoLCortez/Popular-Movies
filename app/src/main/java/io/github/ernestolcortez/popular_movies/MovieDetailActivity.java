@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -39,6 +40,8 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoAdapt
     private TextView mSynopsis;
     private ImageView mPoster;
     private ImageView mBackDrop;
+    private CardView videosCardView;
+    private CardView reviewsCardView;
     private FloatingActionButton mFAB;
     private VideoAdapter videoAdapter;
     private ReviewAdapter reviewAdapter;
@@ -56,6 +59,8 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoAdapt
         mPoster = (ImageView) findViewById(R.id.detail_view_poster);
         mBackDrop = (ImageView) findViewById(R.id.backdrop);
         mFAB = (FloatingActionButton) findViewById(R.id.fab_button);
+        videosCardView = (CardView) findViewById(R.id.videos_cardview);
+        reviewsCardView = (CardView) findViewById(R.id.reviews_cardview);
 
         videoAdapter = new VideoAdapter(this);
         initializeRecylerView((RecyclerView) findViewById(R.id.recyclerview_videos), videoAdapter);
@@ -152,15 +157,21 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoAdapt
 
         @Override
         public void onTaskComplete(ReviewObject[] reviews) {
-            if (reviews != null) {
+            if (reviews.length > 0) {
                 reviewAdapter.setReviewData(reviews);
+                reviewsCardView.setVisibility(View.VISIBLE);
+            } else {
+                reviewsCardView.setVisibility(View.INVISIBLE);
             }
         }
 
         @Override
         public void onTaskComplete(ArrayList<RelatedVideo> videos) {
-            if (videos != null) {
+            if (videos.size() > 0) {
                 videoAdapter.setVideoData(videos);
+                videosCardView.setVisibility(View.VISIBLE);
+            } else {
+                videosCardView.setVisibility(View.INVISIBLE);
             }
         }
     }

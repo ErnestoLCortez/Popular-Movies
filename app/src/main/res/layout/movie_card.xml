@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="@dimen/padding_medium"
-    app:cardCornerRadius="4dp">
+    app:cardCornerRadius="@dimen/card_corner_radius">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,44 +17,43 @@
             android:id="@+id/detail_view_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium"
             android:padding="@dimen/padding_medium"
             android:textSize="@dimen/text_size_display1"
+            app:layout_constraintBottom_toTopOf="@+id/detail_view_poster"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Movie Title"
-            android:layout_marginBottom="4dp"
-            app:layout_constraintBottom_toTopOf="@+id/detail_view_poster" />
+            tools:text="Movie Title" />
 
 
         <ImageView
             android:id="@+id/detail_view_poster"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_small"
             android:adjustViewBounds="true"
             android:contentDescription="@string/placeholder_description"
             android:src="@drawable/posterplaceholder"
             app:layout_constraintBottom_toTopOf="@+id/detail_view_synopsis"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_view_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintHorizontal_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/detail_view_title" />
 
 
         <TextView
             android:id="@+id/detail_view_rating"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="@dimen/margin_medium"
             android:textSize="@dimen/text_size_subheading"
-
             app:layout_constraintStart_toStartOf="@+id/detail_view_release"
             app:layout_constraintTop_toBottomOf="@+id/detail_view_release"
             tools:text="10/10" />
@@ -64,23 +63,23 @@
             android:id="@+id/detail_view_synopsis"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_small"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="Movie synopsis."
             app:layout_constraintTop_toBottomOf="@+id/detail_view_poster"
-            android:layout_marginTop="4dp" />
+            tools:text="Movie synopsis." />
 
         <TextView
             android:id="@+id/detail_view_release"
             android:layout_width="wrap_content"
-            android:layout_height="29dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="4dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_marginStart="@dimen/margin_small"
             android:textSize="@dimen/text_size_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
