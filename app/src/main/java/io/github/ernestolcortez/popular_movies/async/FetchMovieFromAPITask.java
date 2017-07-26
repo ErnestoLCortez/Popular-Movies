@@ -1,4 +1,4 @@
-package io.github.ernestolcortez.popular_movies;
+package io.github.ernestolcortez.popular_movies.async;
 
 import android.database.Cursor;
 import android.os.AsyncTask;

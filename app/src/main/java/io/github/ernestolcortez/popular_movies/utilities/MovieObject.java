@@ -3,6 +3,9 @@ package io.github.ernestolcortez.popular_movies.utilities;
 import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.util.ArrayList;
+
 import io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract;
 
 import static io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract.Movies.COLUMN_MOVIE_ID;
@@ -27,14 +30,16 @@ public final class MovieObject implements Parcelable {
     private final double voteAverage;
     private final String plotSynopsis;
     private final int movieId;
+    private final String movieBackdropPath;
 
-    public MovieObject(String title, String releaseDate, String moviePosterPath, double voteAverage, String plotSynopsis, int movieId) {
+    public MovieObject(String title, String releaseDate, String moviePosterPath, double voteAverage, String plotSynopsis, int movieId, String movieBackdropPath) {
         this.title = title;
         this.releaseDate = releaseDate;
         this.moviePosterPath = moviePosterPath;
         this.voteAverage = voteAverage;
         this.plotSynopsis = plotSynopsis;
         this.movieId = movieId;
+        this.movieBackdropPath = movieBackdropPath;
     }
 
     private MovieObject(Parcel in){
@@ -44,6 +49,7 @@ public final class MovieObject implements Parcelable {
         this.voteAverage = in.readDouble();
         this.plotSynopsis = in.readString();
         this.movieId = in.readInt();
+        this.movieBackdropPath = in.readString();
     }
 
     @Override
@@ -59,6 +65,7 @@ public final class MovieObject implements Parcelable {
         dest.writeDouble(voteAverage);
         dest.writeString(plotSynopsis);
         dest.writeInt(movieId);
+        dest.writeString(movieBackdropPath);
     }
 
     public String getTitle() {
@@ -82,6 +89,8 @@ public final class MovieObject implements Parcelable {
     }
 
     public int getMovieId() { return movieId; }
+
+    public String getMovieBackdropPath() { return movieBackdropPath; }
 
     public ContentValues toContentValue() {
         ContentValues cv = new ContentValues();

@@ -1,4 +1,4 @@
-package io.github.ernestolcortez.popular_movies;
+package io.github.ernestolcortez.popular_movies.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import io.github.ernestolcortez.popular_movies.R;
 import io.github.ernestolcortez.popular_movies.utilities.MovieObject;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {

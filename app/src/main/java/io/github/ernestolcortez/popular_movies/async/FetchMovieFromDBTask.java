@@ -1,4 +1,4 @@
-package io.github.ernestolcortez.popular_movies;
+package io.github.ernestolcortez.popular_movies.async;
 
 import android.content.ContentResolver;
 import android.content.Context;

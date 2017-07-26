@@ -4,19 +4,26 @@ package io.github.ernestolcortez.popular_movies;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.ContentObserver;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import io.github.ernestolcortez.popular_movies.adapters.MovieAdapter;
+import io.github.ernestolcortez.popular_movies.async.FetchMovieFromAPITask;
+import io.github.ernestolcortez.popular_movies.async.FetchMovieFromDBTask;
 import io.github.ernestolcortez.popular_movies.data.FetchMovieFromDBListener;
 import io.github.ernestolcortez.popular_movies.utilities.AsyncTaskListener;
 import io.github.ernestolcortez.popular_movies.utilities.MovieObject;
@@ -30,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
     private String sortQuery;
+    private ContentObserver favoritesObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +59,35 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mMovieAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mMovieAdapter);
 
+        favoritesObserver = new ContentObserver(new Handler()) {
+            @Override
+            public void onChange(boolean selfChange) {
+                super.onChange(selfChange);
+                Log.d("CONTENTOBSERVER", "Change happened");
+                loadMovieData();
+            }
+
+            @Override
+            public void onChange(boolean selfChange, Uri uri) {
+                super.onChange(selfChange);
+                Log.d("CONTENTOBSERVER", "Change happened on " + uri.toString());
+                loadMovieData();
+            }
+        };
+
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         loadMovieData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getContentResolver().registerContentObserver(CONTENT_URI,true, favoritesObserver);
+
     }
 
     @Override
@@ -95,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         super.onDestroy();
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
+        getContentResolver().unregisterContentObserver(favoritesObserver);
     }
 
     private void loadMovieData() {
