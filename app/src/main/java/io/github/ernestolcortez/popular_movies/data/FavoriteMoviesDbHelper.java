@@ -3,7 +3,6 @@ package io.github.ernestolcortez.popular_movies.data;
 import io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract.*;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 

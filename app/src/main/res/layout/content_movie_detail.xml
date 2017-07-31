@@ -6,12 +6,14 @@
     android:layout_height="match_parent"
     android:padding="@dimen/padding_large"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="io.github.ernestolcortez.popular_movies.MovieDetailActivity">
+    tools:context="io.github.ernestolcortez.popular_movies.MovieDetailActivity"
+    android:id="@+id/detail_scrollview">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/movie_detail_container">
 
         <include layout="@layout/movie_card" />
 

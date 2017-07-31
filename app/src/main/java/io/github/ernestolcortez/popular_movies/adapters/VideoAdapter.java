@@ -26,6 +26,10 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         notifyDataSetChanged();
     }
 
+    public ArrayList<RelatedVideo> getVideoData() {
+        return videos;
+    }
+
     @Override
     public VideoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_card, parent, false);

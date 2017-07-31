@@ -4,10 +4,6 @@ import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-
-import io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract;
-
 import static io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContract.Movies.COLUMN_MOVIE_ID;
 
 public final class MovieObject implements Parcelable {

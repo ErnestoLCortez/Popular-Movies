@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private ProgressBar mLoadingIndicator;
     private String sortQuery;
     private ContentObserver favoritesObserver;
+    GridLayoutManager gridLayoutManager;
+    private static String DATA_STATE = "dataState";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,22 +56,28 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_movies);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, spanCount));
+        gridLayoutManager = new GridLayoutManager(this, spanCount);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
         mMovieAdapter = new MovieAdapter(this);
+
+        if(savedInstanceState != null) {
+            MovieObject[] data = (MovieObject[]) savedInstanceState.getParcelableArray(DATA_STATE);
+            mMovieAdapter.setMovieData(data);
+        } else {
+            loadMovieData();
+        }
         mRecyclerView.setAdapter(mMovieAdapter);
 
         favoritesObserver = new ContentObserver(new Handler()) {
             @Override
             public void onChange(boolean selfChange) {
                 super.onChange(selfChange);
-                Log.d("CONTENTOBSERVER", "Change happened");
                 loadMovieData();
             }
 
             @Override
             public void onChange(boolean selfChange, Uri uri) {
                 super.onChange(selfChange);
-                Log.d("CONTENTOBSERVER", "Change happened on " + uri.toString());
                 loadMovieData();
             }
         };
@@ -80,14 +87,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        loadMovieData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         getContentResolver().registerContentObserver(CONTENT_URI,true, favoritesObserver);
-
     }
 
     @Override
@@ -146,6 +151,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void showErrorMessage() {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArray(DATA_STATE, mMovieAdapter.getMovieData());
     }
 
     public class FetchMovieListener implements AsyncTaskListener, FetchMovieFromDBListener {

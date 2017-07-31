@@ -33,6 +33,8 @@ import static io.github.ernestolcortez.popular_movies.data.FavoriteMoviesContrac
 public class MovieDetailActivity extends AppCompatActivity implements VideoAdapter.VideoAdapterOnClickListener, ReviewAdapter.ReviewAdapterOnClickListener {
     private static final String DESCRIPTION_ADD = "Add movie to favorites";
     private static final String DESCRIPTION_REMOVE = "Remove movie from favorites";
+    private static final String TRAILER_DATA = "trailerData";
+    private static final String REVIEW_DATA = "reviewData";
     private MovieObject currentMovie;
     private TextView mTitle;
     private TextView mReleaseDate;
@@ -63,33 +65,44 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoAdapt
         reviewsCardView = (CardView) findViewById(R.id.reviews_cardview);
 
         videoAdapter = new VideoAdapter(this);
-        initializeRecylerView((RecyclerView) findViewById(R.id.recyclerview_videos), videoAdapter);
-
         reviewAdapter = new ReviewAdapter(this);
-        initializeRecylerView((RecyclerView) findViewById(R.id.recyclerview_reviews), reviewAdapter);
 
         if (savedInstanceState != null) {
             currentMovie = savedInstanceState.getParcelable(MovieObject.MOVIE_KEY);
+            videoAdapter.setVideoData(
+                    (ArrayList<RelatedVideo>)savedInstanceState.getSerializable(TRAILER_DATA)
+            );
+            reviewAdapter.setReviewData(
+                    (ReviewObject[])savedInstanceState.getParcelableArray(REVIEW_DATA)
+            );
         } else if (intent != null && intent.hasExtra(MovieObject.MOVIE_KEY)) {
             currentMovie = getIntent().getParcelableExtra(MovieObject.MOVIE_KEY);
+            new FetchRelatedVideosFromAPITask(new FetchMovieListener()).execute(currentMovie.getMovieId());
+            new FetchMovieReviewsFromAPITask(new FetchMovieListener()).execute(currentMovie.getMovieId());
         }
+
+        initializeToolbar();
+        initializeRecylerView((RecyclerView) findViewById(R.id.recyclerview_reviews), reviewAdapter);
+        initializeRecylerView((RecyclerView) findViewById(R.id.recyclerview_videos), videoAdapter);
 
         new FetchMovieFromDBTask(new FetchMovieListener(), this)
                 .execute(contentUriWithId(currentMovie.getMovieId()));
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(currentMovie.getTitle());
-
-        new FetchRelatedVideosFromAPITask(new FetchMovieListener()).execute(currentMovie.getMovieId());
-        new FetchMovieReviewsFromAPITask(new FetchMovieListener()).execute(currentMovie.getMovieId());
         fillMovieViews();
     }
 
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(MovieObject.MOVIE_KEY, currentMovie);
+        outState.putSerializable(TRAILER_DATA, videoAdapter.getVideoData());
+        outState.putParcelableArray(REVIEW_DATA, reviewAdapter.getReviewData());
         super.onSaveInstanceState(outState);
+    }
+
+    public void initializeToolbar() {
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(currentMovie.getTitle());
     }
 
     public void initializeRecylerView(RecyclerView recyclerView, RecyclerView.Adapter adapter) {
