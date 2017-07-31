@@ -152,13 +152,17 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoAdapt
     @Override
     public void onClick(RelatedVideo video) {
         Intent intent = new Intent(Intent.ACTION_VIEW, video.getVideoUri());
-        startActivity(intent);
+        if(intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 
     @Override
     public void onClick(ReviewObject review) {
         Intent intent = new Intent(Intent.ACTION_VIEW, review.getUri());
-        startActivity(intent);
+        if(intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 
     public class FetchMovieListener implements FetchMovieFromDBListener, FetchMovieReviewsListener, FetchRelatedVideosListener {
